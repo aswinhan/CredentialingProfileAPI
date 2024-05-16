@@ -24,7 +24,7 @@ namespace CredentialingProfileAPI.Controllers
         [HttpGet("services/data/v60.0/sobjects/Account/{providerId}")]
         public async Task<ActionResult<Account>> GetAccount(int providerId)
         {
-            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.ProviderId == providerId);
+            var account = await _context.Accounts.Include(a => a.ShippingAddress).FirstOrDefaultAsync(x => x.ProviderId == providerId);
 
             if (account == null)
             {
