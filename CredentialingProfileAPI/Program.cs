@@ -1,3 +1,4 @@
+using CredentialingProfileAPI.Controllers.Services;
 using CredentialingProfileAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ProviderService>();
+
+// Add logging
+builder.Services.AddLogging();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

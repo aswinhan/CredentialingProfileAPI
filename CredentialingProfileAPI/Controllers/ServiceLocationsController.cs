@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CredentialingProfileAPI.Models;
 using CredentialingProfileAPI.Data;
+using CredentialingProfileAPI.Controllers.Services;
 
 namespace CredentialingProfileAPI.Controllers
 {
@@ -14,24 +15,47 @@ namespace CredentialingProfileAPI.Controllers
     public class ServiceLocationsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ProviderService _providerService;
+        private readonly ILogger<DirectServicesController> _logger;
 
-        public ServiceLocationsController(ApplicationDbContext context)
+        public ServiceLocationsController(ApplicationDbContext context, ProviderService providerService, ILogger<DirectServicesController> logger)
         {
             _context = context;
+            _providerService = providerService;
+            _logger = logger;
         }
 
-        // GET: services/data/v60.0/sobjects/ServiceLocation/5
-        [HttpGet("services/data/v60.0/sobjects/ServiceLocation/{providerId}")]
-        public async Task<ActionResult<ServiceLocation>> GetServiceLocation(int providerId)
+        // GET: services/ServiceLocation/5
+        [HttpGet("services/ServiceLocation/{credentialingProfileId}")]
+        public async Task<ActionResult<ServiceLocation>> GetServiceLocation(string credentialingProfileId)
         {
-            var serviceLocation = await _context.ServiceLocations.FirstOrDefaultAsync(x => x.ProviderId == providerId);
-
-            if (serviceLocation == null)
+            try
             {
-                return NotFound();
-            }
+                int? providerId = await _providerService.GetProviderIdAsync(credentialingProfileId);
 
-            return serviceLocation;
+                if (providerId.HasValue)
+                {
+                    var serviceLocation = await _context.ServiceLocations
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.ProviderId == providerId.Value);
+
+                    if (serviceLocation == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(serviceLocation);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching the account.");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

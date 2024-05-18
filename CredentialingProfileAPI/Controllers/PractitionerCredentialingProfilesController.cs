@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CredentialingProfileAPI.Models;
 using CredentialingProfileAPI.Data;
+using CredentialingProfileAPI.Controllers.Services;
 
 namespace CredentialingProfileAPI.Controllers
 {
@@ -14,24 +15,47 @@ namespace CredentialingProfileAPI.Controllers
     public class PractitionerCredentialingProfilesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ProviderService _providerService;
+        private readonly ILogger<PractitionerCredentialingProfilesController> _logger;
 
-        public PractitionerCredentialingProfilesController(ApplicationDbContext context)
+        public PractitionerCredentialingProfilesController(ApplicationDbContext context, ProviderService providerService, ILogger<PractitionerCredentialingProfilesController> logger)
         {
             _context = context;
+            _providerService = providerService;
+            _logger = logger;
         }
 
-        // GET: services/data/v60.0/sobjects/PractitionerCredentialingProfile/5
-        [HttpGet("services/data/v60.0/sobjects/PractitionerCredentialingProfile/{providerId}")]
-        public async Task<ActionResult<PractitionerCredentialingProfile>> GetPractitionerCredentialingProfile(int providerId)
+        // GET: services/PractitionerCredentialingProfile/5
+        [HttpGet("services/PractitionerCredentialingProfile/{credentialingProfileId}")]
+        public async Task<ActionResult<PractitionerCredentialingProfile>> GetPractitionerCredentialingProfile(string credentialingProfileId)
         {
-            var practitionerCredentialingProfile = await _context.PractitionerCredentialingProfiles.FirstOrDefaultAsync(x => x.ProviderId == providerId);
-
-            if (practitionerCredentialingProfile == null)
+            try
             {
-                return NotFound();
-            }
+                int? providerId = await _providerService.GetProviderIdAsync(credentialingProfileId);
 
-            return practitionerCredentialingProfile;
+                if (providerId.HasValue)
+                {
+                    var practitionerCredentialingProfile = await _context.PractitionerCredentialingProfiles
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.ProviderId == providerId.Value);
+
+                    if (practitionerCredentialingProfile == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(practitionerCredentialingProfile);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching the account.");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CredentialingProfileAPI.Models;
 using CredentialingProfileAPI.Data;
+using CredentialingProfileAPI.Controllers.Services;
 
 namespace CredentialingProfileAPI.Controllers
 {
@@ -14,24 +15,47 @@ namespace CredentialingProfileAPI.Controllers
     public class PostGraduateMedicalTrainingsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ProviderService _providerService;
+        private readonly ILogger<PostGraduateMedicalTrainingsController> _logger;
 
-        public PostGraduateMedicalTrainingsController(ApplicationDbContext context)
+        public PostGraduateMedicalTrainingsController(ApplicationDbContext context, ProviderService providerService, ILogger<PostGraduateMedicalTrainingsController> logger)
         {
             _context = context;
+            _providerService = providerService;
+            _logger = logger;
         }
 
-        // GET: services/data/v60.0/sobjects/PostGraduateMedicalTraining/5
-        [HttpGet("services/data/v60.0/sobjects/PostGraduateMedicalTraining/{providerId}")]
-        public async Task<ActionResult<PostGraduateMedicalTraining>> GetPostGraduateMedicalTraining(int providerId)
+        // GET: services/PostGraduateMedicalTraining/5
+        [HttpGet("services/PostGraduateMedicalTraining/{credentialingProfileId}")]
+        public async Task<ActionResult<PostGraduateMedicalTraining>> GetPostGraduateMedicalTraining(string credentialingProfileId)
         {
-            var postGraduateMedicalTraining = await _context.PostGraduateMedicalTrainings.FirstOrDefaultAsync(x => x.ProviderId == providerId);
-
-            if (postGraduateMedicalTraining == null)
+            try
             {
-                return NotFound();
-            }
+                int? providerId = await _providerService.GetProviderIdAsync(credentialingProfileId);
 
-            return postGraduateMedicalTraining;
+                if (providerId.HasValue)
+                {
+                    var postGraduateMedicalTraining = await _context.PostGraduateMedicalTrainings
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.ProviderId == providerId.Value);
+
+                    if (postGraduateMedicalTraining == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(postGraduateMedicalTraining);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching the account.");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

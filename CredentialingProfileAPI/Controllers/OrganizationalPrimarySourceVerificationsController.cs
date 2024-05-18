@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CredentialingProfileAPI.Models;
 using CredentialingProfileAPI.Data;
+using CredentialingProfileAPI.Controllers.Services;
 
 namespace CredentialingProfileAPI.Controllers
 {
@@ -14,24 +15,46 @@ namespace CredentialingProfileAPI.Controllers
     public class OrganizationalPrimarySourceVerificationsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public OrganizationalPrimarySourceVerificationsController(ApplicationDbContext context)
+        private readonly ProviderService _providerService;
+        private readonly ILogger<OrganizationalPrimarySourceVerificationsController> _logger;
+        public OrganizationalPrimarySourceVerificationsController(ApplicationDbContext context, ProviderService providerService, ILogger<OrganizationalPrimarySourceVerificationsController> logger)
         {
             _context = context;
+            _providerService = providerService;
+            _logger = logger;
         }
 
-        // GET: services/data/v60.0/sobjects/OrganizationalPrimarySourceVerification/5
-        [HttpGet("services/data/v60.0/sobjects/OrganizationalPrimarySourceVerification/{providerId}")]
-        public async Task<ActionResult<OrganizationalPrimarySourceVerification>> GetOrganizationalPrimarySourceVerification(int providerId)
+        // GET: services/OrganizationalPSV/5
+        [HttpGet("services/OrganizationalPSV/{credentialingProfileId}")]
+        public async Task<ActionResult<OrganizationalPrimarySourceVerification>> GetOrganizationalPrimarySourceVerification(string credentialingProfileId)
         {
-            var organizationalPrimarySourceVerification = await _context.OrganizationalPrimarySourceVerifications.FirstOrDefaultAsync(x => x.ProviderId == providerId);
-
-            if (organizationalPrimarySourceVerification == null)
+            try
             {
-                return NotFound();
-            }
+                int? providerId = await _providerService.GetProviderIdAsync(credentialingProfileId);
 
-            return organizationalPrimarySourceVerification;
+                if (providerId.HasValue)
+                {
+                    var organizationalPSV = await _context.OrganizationalPrimarySourceVerifications
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.ProviderId == providerId.Value);
+
+                    if (organizationalPSV == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(organizationalPSV);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching the account.");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

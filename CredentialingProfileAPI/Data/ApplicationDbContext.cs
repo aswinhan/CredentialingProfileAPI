@@ -25,7 +25,6 @@ namespace CredentialingProfileAPI.Data
         public DbSet<PractitionerPrimarySourceVerification> PractitionerPrimarySourceVerifications { get; set; }
         public DbSet<ServiceLocation> ServiceLocations { get; set; }
         public DbSet<ServiceLocationLicense> ServiceLocationLicenses { get; set; }
-        //public DbSet<ProviderKey> ProviderKeys { get; set; }
-
+        public DbSet<ProviderKey> ProviderKeys { get; set; }
     }
 }
