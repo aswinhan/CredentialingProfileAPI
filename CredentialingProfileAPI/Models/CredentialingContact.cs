@@ -7,7 +7,6 @@ namespace CredentialingProfileAPI.Models
         [Key]
         public int Id { get; set; }
         public int ProviderId { get; set; }
-        public string? CredentialingProfileId { get; set; }
         public string? ContactFirstName { get; set; }
         public string? ContactLastName { get; set; }
         public string? ContactEmail { get; set; }        

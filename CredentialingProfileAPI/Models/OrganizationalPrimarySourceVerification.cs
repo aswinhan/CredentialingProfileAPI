@@ -7,7 +7,6 @@ namespace CredentialingProfileAPI.Models
         [Key]
         public int Id { get; set; }
         public int ProviderId { get; set; }
-        public string? CredentialingProfileId { get; set; }
         public string? Name { get; set; }
         public PSVStatus PSVStatus { get; set; }
         public DateTime CreationDate { get; set; }

@@ -7,7 +7,6 @@ namespace CredentialingProfileAPI.Models
         [Key]
         public int Id { get; set; }
         public int? ProviderId { get; set; }
-        public string? CredentialingProfileId { get; set; }
         public string? city { get; set; }
         public string? country { get; set; }
         public string? geocodeAccuracy { get; set; }

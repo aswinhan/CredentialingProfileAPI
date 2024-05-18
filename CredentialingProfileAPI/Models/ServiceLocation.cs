@@ -7,7 +7,6 @@ namespace CredentialingProfileAPI.Models
         [Key]
         public int Id { get; set; }
         public int ProviderId { get; set; }
-        public string? CredentialingProfileId { get; set; }
         public string? AccountSite { get; set; }
         public string? Account { get; set; }        
         public bool FacilityLicenseifapplicable { get; set; }

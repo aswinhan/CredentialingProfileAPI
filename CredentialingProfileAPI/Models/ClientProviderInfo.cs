@@ -8,7 +8,6 @@ namespace CredentialingProfileAPI.Models
         public int ClientProviderId { get; set; }
         public int? ClientId { get; set; }
         public int? ProviderId { get; set; }
-        public string? CredentialingProfileId { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? LastUpdated { get; set; }
         public string? ModUserId { get; set; }
