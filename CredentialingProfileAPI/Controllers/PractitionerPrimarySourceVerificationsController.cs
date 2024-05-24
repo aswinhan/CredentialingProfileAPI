@@ -57,5 +57,33 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // POST: services/PractitionerPrimarySourceVerification
+        [HttpPost("services/PractitionerPrimarySourceVerification")]
+        public async Task<ActionResult<PractitionerPrimarySourceVerification>> PostPractitionerPrimarySourceVerification(PractitionerPrimarySourceVerification practitionerPrimarySourceVerification)
+        {
+            try
+            {
+                if (practitionerPrimarySourceVerification == null)
+                {
+                    return BadRequest("PractitionerPrimarySourceVerification data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.PractitionerPrimarySourceVerifications.Add(practitionerPrimarySourceVerification);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = practitionerPrimarySourceVerification.ProviderId }, practitionerPrimarySourceVerification);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
     }
 }

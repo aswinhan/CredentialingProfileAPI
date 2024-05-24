@@ -57,5 +57,35 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpPost("services/CredentialingContact")]
+        public async Task<ActionResult<CredentialingContact>> PostCredentialingContact(CredentialingContact credentialingContact)
+        {
+            try
+            {
+                if (credentialingContact == null)
+                {
+                    return BadRequest("Credentialing contact data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _context.CredentialingContacts.Add(credentialingContact);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = credentialingContact.ProviderId }, credentialingContact);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
+
+
     }
 }

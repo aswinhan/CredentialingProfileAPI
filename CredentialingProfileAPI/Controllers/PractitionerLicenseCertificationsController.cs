@@ -57,5 +57,33 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // POST: services/PractitionerLicenseCertification
+        [HttpPost("services/PractitionerLicenseCertification")]
+        public async Task<ActionResult<PractitionerLicenseCertification>> PostPractitionerLicenseCertification(PractitionerLicenseCertification practitionerLicenseCertification)
+        {
+            try
+            {
+                if (practitionerLicenseCertification == null)
+                {
+                    return BadRequest("Account data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.PractitionerLicenseCertifications.Add(practitionerLicenseCertification);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = practitionerLicenseCertification.ProviderId }, practitionerLicenseCertification);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
     }
 }

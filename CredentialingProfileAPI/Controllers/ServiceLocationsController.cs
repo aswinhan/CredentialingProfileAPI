@@ -57,5 +57,33 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // POST: services/ServiceLocation
+        [HttpPost("services/ServiceLocation")]
+        public async Task<ActionResult<ServiceLocation>> PostServiceLocation(ServiceLocation serviceLocation)
+        {
+            try
+            {
+                if (serviceLocation == null)
+                {
+                    return BadRequest("ServiceLocation data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.ServiceLocations.Add(serviceLocation);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = serviceLocation.ProviderId }, serviceLocation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
     }
 }

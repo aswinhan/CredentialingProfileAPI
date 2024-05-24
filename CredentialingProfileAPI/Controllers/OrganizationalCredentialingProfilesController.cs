@@ -56,5 +56,33 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // POST: services/OrganizationalCredentialingProfile
+        [HttpPost("services/OrganizationalCredentialingProfile")]
+        public async Task<ActionResult<OrganizationalCredentialingProfile>> PostOrganizationalCredentialingProfile(OrganizationalCredentialingProfile organizationalCredentialingProfile)
+        {
+            try
+            {
+                if (organizationalCredentialingProfile == null)
+                {
+                    return BadRequest("OrganizationalCredentialingProfile data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.OrganizationalCredentialingProfiles.Add(organizationalCredentialingProfile);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = organizationalCredentialingProfile.ProviderId }, organizationalCredentialingProfile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
     }
 }
