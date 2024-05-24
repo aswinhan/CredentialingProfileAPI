@@ -58,6 +58,35 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
+        //[HttpPost("CredentialingContact")]
+        //public async Task<ActionResult<CredentialingContact>> PostCredentialingContact(CredentialingContact credentialingContact)
+        //{
+        //    try
+        //    {
+        //        if (credentialingContact == null)
+        //        {
+        //            return BadRequest("Credentialing contact data is null.");
+        //        }
+
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
+
+        //        _context.CredentialingContacts.Add(credentialingContact);
+        //        await _context.SaveChangesAsync();
+
+        //        return CreatedAtAction(nameof(GetCredentialingContactById), new { id = credentialingContact.Id }, credentialingContact);
+        //        //return CreatedAtAction("GetId", new { id = credentialingContact.Id }, credentialingContact);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "An error occurred while processing the request.");
+
+        //        return StatusCode(500, "An error occurred while processing the request.");
+        //    }
+        //}
+
         [HttpPost("CredentialingContact")]
         public async Task<ActionResult<CredentialingContact>> PostCredentialingContact(CredentialingContact credentialingContact)
         {
@@ -76,14 +105,26 @@ namespace CredentialingProfileAPI.Controllers
                 _context.CredentialingContacts.Add(credentialingContact);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = credentialingContact.ProviderId }, credentialingContact);
+                return CreatedAtAction(nameof(GetCredentialingContactById), new { id = credentialingContact.Id }, credentialingContact);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while processing the request.");
-
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("CredentialingContactById/{id}")]
+        public async Task<ActionResult<CredentialingContact>> GetCredentialingContactById(int id)
+        {
+            var credentialingContact = await _context.CredentialingContacts.FindAsync(id);
+
+            if (credentialingContact == null)
+            {
+                return NotFound();
+            }
+
+            return credentialingContact;
         }
 
 
