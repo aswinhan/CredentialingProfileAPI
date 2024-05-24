@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/HospitalAffiliation/5
-        [HttpGet("services/HospitalAffiliation/{credentialingProfileId}")]
+        // GET: HospitalAffiliation/5
+        [HttpGet("HospitalAffiliation/{credentialingProfileId}")]
         public async Task<ActionResult<HospitalAffiliation>> GetHospitalAffiliation(string credentialingProfileId)
         {
             try
@@ -58,8 +58,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/HospitalAffiliation
-        [HttpPost("services/HospitalAffiliation")]
+        // POST: HospitalAffiliation
+        [HttpPost("HospitalAffiliation")]
         public async Task<ActionResult<HospitalAffiliation>> PostHospitalAffiliation(HospitalAffiliation hospitalAffiliation)
         {
             try

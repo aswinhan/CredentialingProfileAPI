@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/PractitionerPrimarySourceVerification/5
-        [HttpGet("services/PractitionerPrimarySourceVerification/{credentialingProfileId}")]
+        // GET: PractitionerPrimarySourceVerification/5
+        [HttpGet("PractitionerPrimarySourceVerification/{credentialingProfileId}")]
         public async Task<ActionResult<PractitionerPrimarySourceVerification>> GetPractitionerPrimarySourceVerification(string credentialingProfileId)
         {
             try
@@ -58,8 +58,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/PractitionerPrimarySourceVerification
-        [HttpPost("services/PractitionerPrimarySourceVerification")]
+        // POST: PractitionerPrimarySourceVerification
+        [HttpPost("PractitionerPrimarySourceVerification")]
         public async Task<ActionResult<PractitionerPrimarySourceVerification>> PostPractitionerPrimarySourceVerification(PractitionerPrimarySourceVerification practitionerPrimarySourceVerification)
         {
             try

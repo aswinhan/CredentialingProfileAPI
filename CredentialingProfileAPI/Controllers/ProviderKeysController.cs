@@ -20,8 +20,8 @@ namespace CredentialingProfileAPI.Controllers
             _context = context;
         }
 
-        // GET: api/ProviderKeys/5
-        [HttpGet("{id}")]
+        // GET: ProviderKey/5
+        [HttpGet("ProviderKey/{id}")]
         public async Task<ActionResult<ProviderKey>> GetProviderKey(int id)
         {
             var providerKey = await _context.ProviderKeys.FindAsync(id);
@@ -34,8 +34,8 @@ namespace CredentialingProfileAPI.Controllers
             return providerKey;
         }
 
-        // POST: services/ProviderKeys
-        [HttpPost("services/ProviderKeys/")]
+        // POST: ProviderKey
+        [HttpPost("ProviderKey/")]
         public async Task<ActionResult<ProviderKey>> PostProviderKey(ProviderKey providerKey)
         {
             _context.ProviderKeys.Add(providerKey);

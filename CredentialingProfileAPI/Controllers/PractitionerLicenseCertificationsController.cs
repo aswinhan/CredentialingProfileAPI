@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/PractitionerLicenseCertification/5
-        [HttpGet("services/PractitionerLicenseCertification/{credentialingProfileId}")]
+        // GET: PractitionerLicenseCertification/5
+        [HttpGet("PractitionerLicenseCertification/{credentialingProfileId}")]
         public async Task<ActionResult<PractitionerLicenseCertification>> GetPractitionerLicenseCertification(string credentialingProfileId)
         {
             try
@@ -58,8 +58,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/PractitionerLicenseCertification
-        [HttpPost("services/PractitionerLicenseCertification")]
+        // POST: PractitionerLicenseCertification
+        [HttpPost("PractitionerLicenseCertification")]
         public async Task<ActionResult<PractitionerLicenseCertification>> PostPractitionerLicenseCertification(PractitionerLicenseCertification practitionerLicenseCertification)
         {
             try

@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/Account/5
-        [HttpGet("services/Account/{credentialingProfileId}")]
+        // GET: Account/5
+        [HttpGet("Account/{credentialingProfileId}")]
         public async Task<ActionResult<Account>> GetAccount(string credentialingProfileId)
         {
             try
@@ -62,8 +62,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/Account
-        [HttpPost("services/Account")]
+        // POST: Account
+        [HttpPost("Account")]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
             try

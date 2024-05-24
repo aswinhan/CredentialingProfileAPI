@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/ServiceLocation/5
-        [HttpGet("services/ServiceLocation/{credentialingProfileId}")]
+        // GET: ServiceLocation/5
+        [HttpGet("ServiceLocation/{credentialingProfileId}")]
         public async Task<ActionResult<ServiceLocation>> GetServiceLocation(string credentialingProfileId)
         {
             try
@@ -58,8 +58,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/ServiceLocation
-        [HttpPost("services/ServiceLocation")]
+        // POST: ServiceLocation
+        [HttpPost("ServiceLocation")]
         public async Task<ActionResult<ServiceLocation>> PostServiceLocation(ServiceLocation serviceLocation)
         {
             try

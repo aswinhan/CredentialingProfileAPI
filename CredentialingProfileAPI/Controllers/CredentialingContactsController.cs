@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/CredentialingContact/5
-        [HttpGet("services/CredentialingContact/{credentialingProfileId}")]
+        // GET: CredentialingContact/5
+        [HttpGet("CredentialingContact/{credentialingProfileId}")]
         public async Task<ActionResult<CredentialingContact>> GetCredentialingContact(string credentialingProfileId)
         {
             try
@@ -58,7 +58,7 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        [HttpPost("services/CredentialingContact")]
+        [HttpPost("CredentialingContact")]
         public async Task<ActionResult<CredentialingContact>> PostCredentialingContact(CredentialingContact credentialingContact)
         {
             try

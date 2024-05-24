@@ -10,7 +10,6 @@ using CredentialingProfileAPI.Models;
 
 namespace CredentialingProfileAPI.Controllers
 {
-    [Route("services/[controller]")]
     [ApiController]
     public class ShippingAddressesController : ControllerBase
     {
@@ -20,20 +19,17 @@ namespace CredentialingProfileAPI.Controllers
         {
             _context = context;
         }
-        public int? GetShippingAddressIdAsync(int providerid)
-        {
-            return  _context.ShippingAddress
-            .AsNoTracking()
-            .Where(x => x.ProviderId == providerid)
-            .Select(x => x.Id)
-            .FirstOrDefault();
-        }
 
-        // GET: services/ShippingAddresses/5
-        [HttpGet("{providerid}")]
+        // GET: ShippingAddresses/5
+        [HttpGet("ShippingAddress/{providerid}")]
         public async Task<ActionResult<ShippingAddress>> GetShippingAddress(int providerid)
         {
-            int? id = GetShippingAddressIdAsync(providerid);
+            int? id = _context.ShippingAddress
+                        .AsNoTracking()
+                        .Where(x => x.ProviderId == providerid)
+                        .Select(x => x.Id)
+                        .FirstOrDefault();
+
             if(id == null)
             {
                 return NotFound();
@@ -87,7 +83,7 @@ namespace CredentialingProfileAPI.Controllers
 
         // POST: api/ShippingAddresses
 
-        [HttpPost]
+        [HttpPost("ShippingAddress")]
         public async Task<ActionResult<ShippingAddress>> PostShippingAddress(ShippingAddress shippingAddress)
         {
             _context.ShippingAddress.Add(shippingAddress);

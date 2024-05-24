@@ -24,8 +24,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/OrganizationalPSV/5
-        [HttpGet("services/OrganizationalPSV/{credentialingProfileId}")]
+        // GET: OrganizationalPSV/5
+        [HttpGet("OrganizationalPSV/{credentialingProfileId}")]
         public async Task<ActionResult<OrganizationalPrimarySourceVerification>> GetOrganizationalPrimarySourceVerification(string credentialingProfileId)
         {
             try
@@ -57,8 +57,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/OrganizationalPSV
-        [HttpPost("services/OrganizationalPSV")]
+        // POST: OrganizationalPSV
+        [HttpPost("OrganizationalPSV")]
         public async Task<ActionResult<OrganizationalPrimarySourceVerification>> PostOrganizationalPSV(OrganizationalPrimarySourceVerification organizationalPSV)
         {
             try

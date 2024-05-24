@@ -24,8 +24,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/OrganizationalCredentialingProfile/5
-        [HttpGet("services/OrganizationalCredentialingProfile/{credentialingProfileId}")]
+        // GET: OrganizationalCredentialingProfile/5
+        [HttpGet("OrganizationalCredentialingProfile/{credentialingProfileId}")]
         public async Task<ActionResult<OrganizationalCredentialingProfile>> GetOrganizationalCredentialingProfile(string credentialingProfileId)
         {
             try
@@ -57,8 +57,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/OrganizationalCredentialingProfile
-        [HttpPost("services/OrganizationalCredentialingProfile")]
+        // POST: OrganizationalCredentialingProfile
+        [HttpPost("OrganizationalCredentialingProfile")]
         public async Task<ActionResult<OrganizationalCredentialingProfile>> PostOrganizationalCredentialingProfile(OrganizationalCredentialingProfile organizationalCredentialingProfile)
         {
             try

@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/Education/5
-        [HttpGet("services/Education/{credentialingProfileId}")]
+        // GET: Education/5
+        [HttpGet("Education/{credentialingProfileId}")]
         public async Task<ActionResult<Education>> GetEducation(string credentialingProfileId)
         {
             try
@@ -58,7 +58,7 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        [HttpPost("services/Education")]
+        [HttpPost("Education")]
         public async Task<ActionResult<Education>> PostEducation(Education education)
         {
             try

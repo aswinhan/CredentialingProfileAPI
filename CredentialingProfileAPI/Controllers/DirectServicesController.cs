@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/DirectService/5
-        [HttpGet("services/DirectService/{credentialingProfileId}")]
+        // GET: DirectService/5
+        [HttpGet("DirectService/{credentialingProfileId}")]
         public async Task<ActionResult<DirectService>> GetDirectService(string credentialingProfileId)
         {
             try
@@ -58,8 +58,8 @@ namespace CredentialingProfileAPI.Controllers
             }
         }
 
-        // POST: services/DirectService
-        [HttpPost("services/DirectService")]
+        // POST: DirectService
+        [HttpPost("DirectService")]
         public async Task<ActionResult<DirectService>> PostDirectService(DirectService directService)
         {
             try
