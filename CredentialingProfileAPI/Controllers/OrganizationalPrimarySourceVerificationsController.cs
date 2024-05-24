@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.OrganizationalPrimarySourceVerifications.Add(organizationalPSV);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = organizationalPSV.ProviderId }, organizationalPSV);
+                return CreatedAtAction(nameof(GetOrganizationalPSVInfoById), new { providerId = organizationalPSV.ProviderId }, organizationalPSV);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetOrganizationalPSVInfoById/{id}")]
+        public async Task<ActionResult<OrganizationalPrimarySourceVerification>> GetOrganizationalPSVInfoById(int id)
+        {
+            var organizationalPrimarySourceVerification = await _context.OrganizationalPrimarySourceVerifications.FindAsync(id);
+
+            if (organizationalPrimarySourceVerification == null)
+            {
+                return NotFound();
+            }
+            return organizationalPrimarySourceVerification;
         }
     }
 }

@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PractitionerCredentialingProfiles.Add(practitionerCredentialingProfile);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = practitionerCredentialingProfile.ProviderId }, practitionerCredentialingProfile);
+                return CreatedAtAction(nameof(GetPractitionerCPInfoById), new { providerId = practitionerCredentialingProfile.ProviderId }, practitionerCredentialingProfile);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetPractitionerCPInfoById/{id}")]
+        public async Task<ActionResult<PractitionerCredentialingProfile>> GetPractitionerCPInfoById(int id)
+        {
+            var practitionerCredentialingProfile = await _context.PractitionerCredentialingProfiles.FindAsync(id);
+
+            if (practitionerCredentialingProfile == null)
+            {
+                return NotFound();
+            }
+            return practitionerCredentialingProfile;
         }
     }
 }

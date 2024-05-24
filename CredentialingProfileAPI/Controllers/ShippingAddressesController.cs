@@ -92,6 +92,18 @@ namespace CredentialingProfileAPI.Controllers
             return CreatedAtAction("GetShippingAddress", new { id = shippingAddress.Id }, shippingAddress);
         }
 
+        [HttpGet("GetShippingAddressInfoById/{id}")]
+        public async Task<ActionResult<ShippingAddress>> GetShippingAddressInfoById(int id)
+        {
+            var shippingAddress = await _context.ShippingAddress.FindAsync(id);
+
+            if (shippingAddress == null)
+            {
+                return NotFound();
+            }
+            return shippingAddress;
+        }
+
         //// DELETE: api/ShippingAddresses/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> DeleteShippingAddress(int id)

@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PractitionerLicenseCertifications.Add(practitionerLicenseCertification);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = practitionerLicenseCertification.ProviderId }, practitionerLicenseCertification);
+                return CreatedAtAction(nameof(GetPractitionerLCInfoById), new { providerId = practitionerLicenseCertification.ProviderId }, practitionerLicenseCertification);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetPractitionerLCInfoById/{id}")]
+        public async Task<ActionResult<PractitionerLicenseCertification>> GetPractitionerLCInfoById(int id)
+        {
+            var practitionerLicenseCertification = await _context.PractitionerLicenseCertifications.FindAsync(id);
+
+            if (practitionerLicenseCertification == null)
+            {
+                return NotFound();
+            }
+            return practitionerLicenseCertification;
         }
     }
 }

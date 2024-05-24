@@ -77,7 +77,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.DirectServices.Add(directService);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = directService.ProviderId }, directService);
+                return CreatedAtAction(nameof(GetDirectServiceById), new { providerId = directService.ProviderId }, directService);
             }
             catch (Exception ex)
             {
@@ -85,6 +85,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetDirectServiceById/{id}")]
+        public async Task<ActionResult<DirectService>> GetDirectServiceById(int id)
+        {
+            var directService = await _context.DirectServices.FindAsync(id);
+
+            if (directService == null)
+            {
+                return NotFound();
+            }
+            return directService;
         }
 
     }

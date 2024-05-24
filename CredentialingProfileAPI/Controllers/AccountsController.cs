@@ -80,14 +80,25 @@ namespace CredentialingProfileAPI.Controllers
                 _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = account.ProviderId }, account);
+                return CreatedAtAction(nameof(GetAccountInfoById), new { providerId = account.ProviderId }, account);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while processing the request.");
-
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetAccountInfoById/{id}")]
+        public async Task<ActionResult<Account>> GetAccountInfoById(int id)
+        {
+            var account = await _context.Accounts.FindAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return account;
         }
     }
 }

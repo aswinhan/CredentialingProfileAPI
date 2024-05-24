@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PractitionerPrimarySourceVerifications.Add(practitionerPrimarySourceVerification);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = practitionerPrimarySourceVerification.ProviderId }, practitionerPrimarySourceVerification);
+                return CreatedAtAction(nameof( GetPractitionerPSVInfoById), new { providerId = practitionerPrimarySourceVerification.ProviderId }, practitionerPrimarySourceVerification);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetPractitionerPSVInfoById/{id}")]
+        public async Task<ActionResult<PractitionerPrimarySourceVerification>> GetPractitionerPSVInfoById(int id)
+        {
+            var practitionerPrimarySourceVerification = await _context.PractitionerPrimarySourceVerifications.FindAsync(id);
+
+            if (practitionerPrimarySourceVerification == null)
+            {
+                return NotFound();
+            }
+            return practitionerPrimarySourceVerification;
         }
     }
 }

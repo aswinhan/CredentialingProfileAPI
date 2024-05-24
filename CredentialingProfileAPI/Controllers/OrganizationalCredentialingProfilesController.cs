@@ -75,7 +75,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.OrganizationalCredentialingProfiles.Add(organizationalCredentialingProfile);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = organizationalCredentialingProfile.ProviderId }, organizationalCredentialingProfile);
+                return CreatedAtAction(nameof(GetOrganizationalCPInfoById), new { providerId = organizationalCredentialingProfile.ProviderId }, organizationalCredentialingProfile);
             }
             catch (Exception ex)
             {
@@ -83,6 +83,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetOrganizationalCPInfoById/{id}")]
+        public async Task<ActionResult<OrganizationalCredentialingProfile>> GetOrganizationalCPInfoById(int id)
+        {
+            var organizationalCredentialingProfile = await _context.OrganizationalCredentialingProfiles.FindAsync(id);
+
+            if (organizationalCredentialingProfile == null)
+            {
+                return NotFound();
+            }
+            return organizationalCredentialingProfile;
         }
     }
 }

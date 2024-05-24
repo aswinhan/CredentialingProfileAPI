@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.HospitalAffiliations.Add(hospitalAffiliation);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = hospitalAffiliation.ProviderId }, hospitalAffiliation);
+                return CreatedAtAction(nameof(GetHospitalAffiliationInfoById), new { providerId = hospitalAffiliation.ProviderId }, hospitalAffiliation);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetHospitalAffiliationInfoById/{id}")]
+        public async Task<ActionResult<HospitalAffiliation>> GetHospitalAffiliationInfoById(int id)
+        {
+            var hospitalAffiliation = await _context.HospitalAffiliations.FindAsync(id);
+
+            if (hospitalAffiliation == null)
+            {
+                return NotFound();
+            }
+            return hospitalAffiliation;
         }
     }
 }

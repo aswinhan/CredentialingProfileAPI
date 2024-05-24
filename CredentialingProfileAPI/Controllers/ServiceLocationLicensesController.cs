@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.ServiceLocationLicenses.Add(serviceLocationLicense);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = serviceLocationLicense.ProviderId }, serviceLocationLicense);
+                return CreatedAtAction(nameof(GetServiceLocationLicenseInfoById), new { providerId = serviceLocationLicense.ProviderId }, serviceLocationLicense);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetServiceLocationLicenseInfoById/{id}")]
+        public async Task<ActionResult<ServiceLocationLicense>> GetServiceLocationLicenseInfoById(int id)
+        {
+            var serviceLocationLicense = await _context.ServiceLocationLicenses.FindAsync(id);
+
+            if (serviceLocationLicense == null)
+            {
+                return NotFound();
+            }
+            return serviceLocationLicense;
         }
     }
 }

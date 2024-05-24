@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.Educations.Add(education);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = education.ProviderId }, education);
+                return CreatedAtAction(nameof(GetEducationInfoById), new { providerId = education.ProviderId }, education);
             }
             catch (Exception ex)
             {
@@ -84,6 +84,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetEducationInfoById/{id}")]
+        public async Task<ActionResult<Education>> GetEducationInfoById(int id)
+        {
+            var education = await _context.Educations.FindAsync(id);
+
+            if (education == null)
+            {
+                return NotFound();
+            }
+            return education;
         }
 
     }

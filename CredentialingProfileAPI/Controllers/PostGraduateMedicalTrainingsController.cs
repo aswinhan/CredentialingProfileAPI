@@ -77,7 +77,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PostGraduateMedicalTrainings.Add(postGraduateMedicalTraining);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProviderId", new { providerId = postGraduateMedicalTraining.ProviderId }, postGraduateMedicalTraining);
+                return CreatedAtAction(nameof(GetPostGraduateMTInfoById), new { providerId = postGraduateMedicalTraining.ProviderId }, postGraduateMedicalTraining);
             }
             catch (Exception ex)
             {
@@ -85,6 +85,18 @@ namespace CredentialingProfileAPI.Controllers
 
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpGet("GetPostGraduateMTInfoById/{id}")]
+        public async Task<ActionResult<PostGraduateMedicalTraining>> GetPostGraduateMTInfoById(int id)
+        {
+            var postGraduateMedicalTraining = await _context.PostGraduateMedicalTrainings.FindAsync(id);
+
+            if (postGraduateMedicalTraining == null)
+            {
+                return NotFound();
+            }
+            return postGraduateMedicalTraining;
         }
     }
 }
