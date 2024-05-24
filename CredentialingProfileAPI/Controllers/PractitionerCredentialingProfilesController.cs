@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/PractitionerCredentialingProfile/5
-        [HttpGet("services/PractitionerCredentialingProfile/{credentialingProfileId}")]
+        // GET: PractitionerCredentialingProfile/5
+        [HttpGet("PractitionerCredentialingProfile/{credentialingProfileId}")]
         public async Task<ActionResult<PractitionerCredentialingProfile>> GetPractitionerCredentialingProfile(string credentialingProfileId)
         {
             try
@@ -55,6 +55,34 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: PractitionerCredentialingProfile
+        [HttpPost("PractitionerCredentialingProfile")]
+        public async Task<ActionResult<PractitionerCredentialingProfile>> PostPractitionerCredentialingProfile(PractitionerCredentialingProfile practitionerCredentialingProfile)
+        {
+            try
+            {
+                if (practitionerCredentialingProfile == null)
+                {
+                    return BadRequest("PractitionerCredentialingProfile data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.PractitionerCredentialingProfiles.Add(practitionerCredentialingProfile);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = practitionerCredentialingProfile.ProviderId }, practitionerCredentialingProfile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

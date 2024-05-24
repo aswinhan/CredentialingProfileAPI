@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/HospitalAffiliation/5
-        [HttpGet("services/HospitalAffiliation/{credentialingProfileId}")]
+        // GET: HospitalAffiliation/5
+        [HttpGet("HospitalAffiliation/{credentialingProfileId}")]
         public async Task<ActionResult<HospitalAffiliation>> GetHospitalAffiliation(string credentialingProfileId)
         {
             try
@@ -55,6 +55,34 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: HospitalAffiliation
+        [HttpPost("HospitalAffiliation")]
+        public async Task<ActionResult<HospitalAffiliation>> PostHospitalAffiliation(HospitalAffiliation hospitalAffiliation)
+        {
+            try
+            {
+                if (hospitalAffiliation == null)
+                {
+                    return BadRequest("HospitalAffiliation data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.HospitalAffiliations.Add(hospitalAffiliation);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = hospitalAffiliation.ProviderId }, hospitalAffiliation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

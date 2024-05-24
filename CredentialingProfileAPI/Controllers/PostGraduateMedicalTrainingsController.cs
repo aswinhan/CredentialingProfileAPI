@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/PostGraduateMedicalTraining/5
-        [HttpGet("services/PostGraduateMedicalTraining/{credentialingProfileId}")]
+        // GET: PostGraduateMedicalTraining/5
+        [HttpGet("PostGraduateMedicalTraining/{credentialingProfileId}")]
         public async Task<ActionResult<PostGraduateMedicalTraining>> GetPostGraduateMedicalTraining(string credentialingProfileId)
         {
             try
@@ -55,6 +55,35 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: PostGraduateMedicalTraining
+        [HttpPost("PostGraduateMedicalTraining")]
+        public async Task<ActionResult<PostGraduateMedicalTraining>> PostPostGraduateMedicalTraining(PostGraduateMedicalTraining postGraduateMedicalTraining)
+        {
+            try
+            {
+                if (postGraduateMedicalTraining == null)
+                {
+                    return BadRequest("PostGraduateMedicalTraining data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _context.PostGraduateMedicalTrainings.Add(postGraduateMedicalTraining);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = postGraduateMedicalTraining.ProviderId }, postGraduateMedicalTraining);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

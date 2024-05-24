@@ -24,8 +24,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/OrganizationalPSV/5
-        [HttpGet("services/OrganizationalPSV/{credentialingProfileId}")]
+        // GET: OrganizationalPSV/5
+        [HttpGet("OrganizationalPSV/{credentialingProfileId}")]
         public async Task<ActionResult<OrganizationalPrimarySourceVerification>> GetOrganizationalPrimarySourceVerification(string credentialingProfileId)
         {
             try
@@ -54,6 +54,35 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: OrganizationalPSV
+        [HttpPost("OrganizationalPSV")]
+        public async Task<ActionResult<OrganizationalPrimarySourceVerification>> PostOrganizationalPSV(OrganizationalPrimarySourceVerification organizationalPSV)
+        {
+            try
+            {
+                if (organizationalPSV == null)
+                {
+                    return BadRequest("Account data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _context.OrganizationalPrimarySourceVerifications.Add(organizationalPSV);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = organizationalPSV.ProviderId }, organizationalPSV);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

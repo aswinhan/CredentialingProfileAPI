@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/DirectService/5
-        [HttpGet("services/DirectService/{credentialingProfileId}")]
+        // GET: DirectService/5
+        [HttpGet("DirectService/{credentialingProfileId}")]
         public async Task<ActionResult<DirectService>> GetDirectService(string credentialingProfileId)
         {
             try
@@ -57,5 +57,35 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // POST: DirectService
+        [HttpPost("DirectService")]
+        public async Task<ActionResult<DirectService>> PostDirectService(DirectService directService)
+        {
+            try
+            {
+                if (directService == null)
+                {
+                    return BadRequest("Direct service data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _context.DirectServices.Add(directService);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = directService.ProviderId }, directService);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
+
     }
 }

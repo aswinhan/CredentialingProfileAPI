@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/Education/5
-        [HttpGet("services/Education/{credentialingProfileId}")]
+        // GET: Education/5
+        [HttpGet("Education/{credentialingProfileId}")]
         public async Task<ActionResult<Education>> GetEducation(string credentialingProfileId)
         {
             try
@@ -57,5 +57,34 @@ namespace CredentialingProfileAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpPost("Education")]
+        public async Task<ActionResult<Education>> PostEducation(Education education)
+        {
+            try
+            {
+                if (education == null)
+                {
+                    return BadRequest("Education data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _context.Educations.Add(education);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = education.ProviderId }, education);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
+
     }
 }

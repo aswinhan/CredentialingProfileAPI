@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/ServiceLocationLicense/5
-        [HttpGet("services/ServiceLocationLicense/{credentialingProfileId}")]
+        // GET: ServiceLocationLicense/5
+        [HttpGet("ServiceLocationLicense/{credentialingProfileId}")]
         public async Task<ActionResult<ServiceLocationLicense>> GetServiceLocationLicense(string credentialingProfileId)
         {
             try
@@ -55,6 +55,34 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: ServiceLocationLicense
+        [HttpPost("ServiceLocationLicense")]
+        public async Task<ActionResult<ServiceLocationLicense>> PostServiceLocationLicense(ServiceLocationLicense serviceLocationLicense)
+        {
+            try
+            {
+                if (serviceLocationLicense == null)
+                {
+                    return BadRequest("ServiceLocationLicense data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.ServiceLocationLicenses.Add(serviceLocationLicense);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = serviceLocationLicense.ProviderId }, serviceLocationLicense);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

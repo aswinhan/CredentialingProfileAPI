@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/PractitionerPrimarySourceVerification/5
-        [HttpGet("services/PractitionerPrimarySourceVerification/{credentialingProfileId}")]
+        // GET: PractitionerPrimarySourceVerification/5
+        [HttpGet("PractitionerPrimarySourceVerification/{credentialingProfileId}")]
         public async Task<ActionResult<PractitionerPrimarySourceVerification>> GetPractitionerPrimarySourceVerification(string credentialingProfileId)
         {
             try
@@ -55,6 +55,34 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: PractitionerPrimarySourceVerification
+        [HttpPost("PractitionerPrimarySourceVerification")]
+        public async Task<ActionResult<PractitionerPrimarySourceVerification>> PostPractitionerPrimarySourceVerification(PractitionerPrimarySourceVerification practitionerPrimarySourceVerification)
+        {
+            try
+            {
+                if (practitionerPrimarySourceVerification == null)
+                {
+                    return BadRequest("PractitionerPrimarySourceVerification data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.PractitionerPrimarySourceVerifications.Add(practitionerPrimarySourceVerification);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = practitionerPrimarySourceVerification.ProviderId }, practitionerPrimarySourceVerification);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

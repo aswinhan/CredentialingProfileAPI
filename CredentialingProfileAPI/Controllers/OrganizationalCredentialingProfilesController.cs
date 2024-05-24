@@ -24,8 +24,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/OrganizationalCredentialingProfile/5
-        [HttpGet("services/OrganizationalCredentialingProfile/{credentialingProfileId}")]
+        // GET: OrganizationalCredentialingProfile/5
+        [HttpGet("OrganizationalCredentialingProfile/{credentialingProfileId}")]
         public async Task<ActionResult<OrganizationalCredentialingProfile>> GetOrganizationalCredentialingProfile(string credentialingProfileId)
         {
             try
@@ -54,6 +54,34 @@ namespace CredentialingProfileAPI.Controllers
             {
                 _logger.LogError(ex, "An error occurred while fetching the account.");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: OrganizationalCredentialingProfile
+        [HttpPost("OrganizationalCredentialingProfile")]
+        public async Task<ActionResult<OrganizationalCredentialingProfile>> PostOrganizationalCredentialingProfile(OrganizationalCredentialingProfile organizationalCredentialingProfile)
+        {
+            try
+            {
+                if (organizationalCredentialingProfile == null)
+                {
+                    return BadRequest("OrganizationalCredentialingProfile data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.OrganizationalCredentialingProfiles.Add(organizationalCredentialingProfile);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = organizationalCredentialingProfile.ProviderId }, organizationalCredentialingProfile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }

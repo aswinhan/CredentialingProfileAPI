@@ -25,8 +25,8 @@ namespace CredentialingProfileAPI.Controllers
             _logger = logger;
         }
 
-        // GET: services/Account/5
-        [HttpGet("services/Account/{credentialingProfileId}")]
+        // GET: Account/5
+        [HttpGet("Account/{credentialingProfileId}")]
         public async Task<ActionResult<Account>> GetAccount(string credentialingProfileId)
         {
             try
@@ -59,6 +59,34 @@ namespace CredentialingProfileAPI.Controllers
 
                 // Return a generic error message
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST: Account
+        [HttpPost("Account")]
+        public async Task<ActionResult<Account>> PostAccount(Account account)
+        {
+            try
+            {
+                if (account == null)
+                {
+                    return BadRequest("Account data is null.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.Accounts.Add(account);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProviderId", new { providerId = account.ProviderId }, account);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the request.");
+
+                return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }
