@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.Educations.Add(education);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetEducationInfoById), new { providerId = education.ProviderId }, education);
+                return CreatedAtAction(nameof(GetEducationInfoById), new { id = education.Id }, education);
             }
             catch (Exception ex)
             {

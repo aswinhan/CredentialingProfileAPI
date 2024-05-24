@@ -26,6 +26,6 @@ namespace CredentialingProfileAPI.Data
         public DbSet<ServiceLocation> ServiceLocations { get; set; }
         public DbSet<ServiceLocationLicense> ServiceLocationLicenses { get; set; }
         public DbSet<ProviderKey> ProviderKeys { get; set; }
-        public DbSet<CredentialingProfileAPI.Models.ShippingAddress> ShippingAddress { get; set; } = default!;
+        public DbSet<ShippingAddress> ShippingAddress { get; set; };
     }
 }

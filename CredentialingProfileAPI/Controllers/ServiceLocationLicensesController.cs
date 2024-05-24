@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.ServiceLocationLicenses.Add(serviceLocationLicense);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetServiceLocationLicenseInfoById), new { providerId = serviceLocationLicense.ProviderId }, serviceLocationLicense);
+                return CreatedAtAction(nameof(GetServiceLocationLicenseInfoById), new { id = serviceLocationLicense.Id }, serviceLocationLicense);
             }
             catch (Exception ex)
             {

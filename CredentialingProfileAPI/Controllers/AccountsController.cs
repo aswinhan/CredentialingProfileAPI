@@ -80,7 +80,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetAccountInfoById), new { providerId = account.ProviderId }, account);
+                return CreatedAtAction(nameof(GetAccountInfoById), new { id = account.Id }, account);
             }
             catch (Exception ex)
             {

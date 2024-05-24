@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PractitionerCredentialingProfiles.Add(practitionerCredentialingProfile);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetPractitionerCPInfoById), new { providerId = practitionerCredentialingProfile.ProviderId }, practitionerCredentialingProfile);
+                return CreatedAtAction(nameof(GetPractitionerCPInfoById), new { id = practitionerCredentialingProfile.Id }, practitionerCredentialingProfile);
             }
             catch (Exception ex)
             {

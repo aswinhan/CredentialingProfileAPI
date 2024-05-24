@@ -77,7 +77,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.DirectServices.Add(directService);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetDirectServiceById), new { providerId = directService.ProviderId }, directService);
+                return CreatedAtAction(nameof(GetDirectServiceById), new { id = directService.Id }, directService);
             }
             catch (Exception ex)
             {

@@ -77,7 +77,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PostGraduateMedicalTrainings.Add(postGraduateMedicalTraining);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetPostGraduateMTInfoById), new { providerId = postGraduateMedicalTraining.ProviderId }, postGraduateMedicalTraining);
+                return CreatedAtAction(nameof(GetPostGraduateMTInfoById), new { id = postGraduateMedicalTraining.Id }, postGraduateMedicalTraining);
             }
             catch (Exception ex)
             {

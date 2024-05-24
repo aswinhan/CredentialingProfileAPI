@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.HospitalAffiliations.Add(hospitalAffiliation);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetHospitalAffiliationInfoById), new { providerId = hospitalAffiliation.ProviderId }, hospitalAffiliation);
+                return CreatedAtAction(nameof(GetHospitalAffiliationInfoById), new { id = hospitalAffiliation.Id }, hospitalAffiliation);
             }
             catch (Exception ex)
             {

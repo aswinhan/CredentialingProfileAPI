@@ -41,7 +41,7 @@ namespace CredentialingProfileAPI.Controllers
             _context.ProviderKeys.Add(providerKey);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProviderKeyInfoById), new { providerId = providerKey.ProviderId }, providerKey);
+            return CreatedAtAction(nameof(GetProviderKeyInfoById), new { id = providerKey.Id }, providerKey);
         }
 
         [HttpGet("GetProviderKeyInfoById/{id}")]

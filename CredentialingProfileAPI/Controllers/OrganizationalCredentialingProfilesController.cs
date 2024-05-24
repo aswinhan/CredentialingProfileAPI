@@ -75,7 +75,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.OrganizationalCredentialingProfiles.Add(organizationalCredentialingProfile);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetOrganizationalCPInfoById), new { providerId = organizationalCredentialingProfile.ProviderId }, organizationalCredentialingProfile);
+                return CreatedAtAction(nameof(GetOrganizationalCPInfoById), new { id = organizationalCredentialingProfile.Id }, organizationalCredentialingProfile);
             }
             catch (Exception ex)
             {

@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.PractitionerPrimarySourceVerifications.Add(practitionerPrimarySourceVerification);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof( GetPractitionerPSVInfoById), new { providerId = practitionerPrimarySourceVerification.ProviderId }, practitionerPrimarySourceVerification);
+                return CreatedAtAction(nameof( GetPractitionerPSVInfoById), new { id = practitionerPrimarySourceVerification.Id }, practitionerPrimarySourceVerification);
             }
             catch (Exception ex)
             {

@@ -76,7 +76,7 @@ namespace CredentialingProfileAPI.Controllers
                 _context.OrganizationalPrimarySourceVerifications.Add(organizationalPSV);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetOrganizationalPSVInfoById), new { providerId = organizationalPSV.ProviderId }, organizationalPSV);
+                return CreatedAtAction(nameof(GetOrganizationalPSVInfoById), new { id = organizationalPSV.Id }, organizationalPSV);
             }
             catch (Exception ex)
             {
