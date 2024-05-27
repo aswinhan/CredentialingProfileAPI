@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CredentialingProfileAPI.Models;
 using CredentialingProfileAPI.Data;
 using CredentialingProfileAPI.Controllers.Services;
+using CredentialingProfileAPI.Models.Entities;
 
 namespace CredentialingProfileAPI.Controllers
 {
@@ -27,7 +28,7 @@ namespace CredentialingProfileAPI.Controllers
 
         // GET: Education/5
         [HttpGet("Education/{credentialingProfileId}")]
-        public async Task<ActionResult<Education>> GetEducation(string credentialingProfileId)
+        public async Task<ActionResult<CompositeRequest>> GetEducation(string credentialingProfileId)
         {
             try
             {
@@ -44,7 +45,28 @@ namespace CredentialingProfileAPI.Controllers
                         return NotFound();
                     }
 
-                    return Ok(education);
+                    var sampleData = new CompositeRequest
+                    {
+                        AllOrNone = true,
+                        CompositeSubRequestList = new List<CompositeSubRequest>
+                    {
+                        new CompositeSubRequest
+                        {
+                            Method = "POST",
+                            Url = "/services/data/v59.0/sobjects/Education__c",
+                            ReferenceId = "eduRecord",
+                            Body = new EducationC
+                            {
+                                Credentialing_Profile_Id__c = credentialingProfileId,
+                                Degree__c = education.Degree,
+                                College_University_Program_Name__c = education.CollegeUniversityProgramName,
+                                Graduation_Date__c = education.GraduationDate.ToString("yyyy-MM-dd")
+                            }
+                        }
+                    }
+                    };
+
+                    return Ok(sampleData);
                 }
                 else
                 {
@@ -53,10 +75,64 @@ namespace CredentialingProfileAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching the account.");
+                _logger.LogError(ex, "An error occurred while fetching the education record.");
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // GET: Education/5
+        //[HttpGet("Education/{credentialingProfileId}")]
+        //public async Task<ActionResult<Education>> GetEducation(string credentialingProfileId)
+        //{
+        //    try
+        //    {
+        //        int? providerId = await _providerService.GetProviderIdAsync(credentialingProfileId);
+
+        //        if (providerId.HasValue)
+        //        {
+        //            var education = await _context.Educations
+        //                .AsNoTracking()
+        //                .FirstOrDefaultAsync(x => x.ProviderId == providerId.Value);
+
+        //            if (education == null)
+        //            {
+        //                return NotFound();
+        //            }
+
+        //            var sampleData = new CompositeRequest
+        //            {
+        //                AllOrNone = true,
+        //                CompositeSubRequestList = new List<CompositeSubRequest>
+        //        {
+        //            new CompositeSubRequest
+        //            {
+        //                Method = "POST",
+        //                Url = "/services/data/v59.0/sobjects/Education__c",
+        //                ReferenceId = "eduRecord",
+        //                Body = new EducationC
+        //                {
+        //                    Credentialing_Profile_Id__c = credentialingProfileId,
+        //                    Degree__c = education.Degree,
+        //                    College_University_Program_Name__c = education.CollegeUniversityProgramName,
+        //                    Graduation_Date__c = education.GraduationDate.ToString()
+        //                }
+        //            }
+        //        }
+        //            };
+
+        //            return Ok(sampleData);
+        //        }
+        //        else
+        //        {
+        //            return NotFound();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "An error occurred while fetching the account.");
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
 
         [HttpPost("Education")]
         public async Task<ActionResult<Education>> PostEducation(Education education)
